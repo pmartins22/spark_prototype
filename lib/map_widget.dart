@@ -8,7 +8,9 @@ import 'package:latlong2/latlong.dart';
 import 'models/marker_data.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key});
+  final bool interactable;
+
+  const MapWidget({super.key, this.interactable = true});
 
   @override
   State<MapWidget> createState() => MapWidgetState();
@@ -222,6 +224,9 @@ class MapWidgetState extends State<MapWidget> {
             _currentZoom = position.zoom;
           });
         },
+          interactionOptions: InteractionOptions(
+            flags: widget.interactable ? InteractiveFlag.all : InteractiveFlag.none
+          )
       ),
       children: [
         TileLayer(

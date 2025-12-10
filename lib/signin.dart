@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spark_prototype/login.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -113,6 +114,16 @@ class _SigninPageState extends State<SigninPage> {
                   }
                 },
                 child: const Text('Submit'),
+              ),
+              const SizedBox(height: 24),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                child: const Text('Log In'),
               ),
             ],
           ),

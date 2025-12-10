@@ -13,22 +13,80 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   LatLng? _currentPosition;
+  double _currentZoom = 15.0;
   final MapController _mapController = MapController();
   StreamSubscription<Position>? _positionStreamSubscription;
   bool _isLoading = true;
 
   final List<MarkerData> _markers = [
+    // Linha 1 - Lado esquerdo da rua
     MarkerData(
       position: LatLng(43.60958932888868, 1.4312053705860839),
-      address: 'Marker 1',
+      address: 'Spot A1',
       isTaken: true,
     ),
     MarkerData(
+      position: LatLng(43.60961432888868, 1.4312053705860839), // ~2.5m ao norte
+      address: 'Spot A2',
+      isTaken: false,
+    ),
+    MarkerData(
+      position: LatLng(43.60963932888868, 1.4312053705860839), // ~2.5m ao norte
+      address: 'Spot A3',
+      isTaken: true,
+    ),
+    MarkerData(
+      position: LatLng(43.60966432888868, 1.4312053705860839), // ~2.5m ao norte
+      address: 'Spot A4',
+      isTaken: false,
+    ),
+    MarkerData(
+      position: LatLng(43.60968932888868, 1.4312053705860839), // ~2.5m ao norte
+      address: 'Spot A5',
+      isTaken: true,
+    ),
+
+    // Linha 2 - Lado direito da rua (paralela)
+    MarkerData(
       position: LatLng(43.60959096196893, 1.432046657112799),
-      address: 'Marker 2',
+      address: 'Spot B1',
+      isTaken: false,
+    ),
+    MarkerData(
+      position: LatLng(43.60961596196893, 1.432046657112799), // ~2.5m ao norte
+      address: 'Spot B2',
+      isTaken: true,
+    ),
+    MarkerData(
+      position: LatLng(43.60964096196893, 1.432046657112799), // ~2.5m ao norte
+      address: 'Spot B3',
+      isTaken: false,
+    ),
+    MarkerData(
+      position: LatLng(43.60966596196893, 1.432046657112799), // ~2.5m ao norte
+      address: 'Spot B4',
+      isTaken: true,
+    ),
+    MarkerData(
+      position: LatLng(43.60969096196893, 1.432046657112799), // ~2.5m ao norte
+      address: 'Spot B5',
       isTaken: false,
     ),
   ];
+
+  double _getMarkerIconSize() {
+    if (_currentZoom < 14.5) {
+      return 0;
+    } else if (_currentZoom >= 14.5 && _currentZoom < 16.0) {
+      return 8;
+    } else if (_currentZoom >= 16.0 && _currentZoom < 17.5) {
+      return 10;
+    } else if (_currentZoom >= 17.5 && _currentZoom < 19.5){
+      return 12;
+    } else {
+      return 15;
+    }
+  }
 
   @override
   void initState() {
@@ -151,6 +209,11 @@ class _MapScreenState extends State<MapScreen> {
               options: MapOptions(
                 initialCenter: _currentPosition ?? LatLng(43.6, 1.44),
                 initialZoom: 15.0,
+                onPositionChanged: (MapCamera position, bool hasGesture) {
+                  setState(() {
+                    _currentZoom = position.zoom;
+                  });
+                },
               ),
               children: [
                 TileLayer(
@@ -166,8 +229,8 @@ class _MapScreenState extends State<MapScreen> {
                       child: GestureDetector(
                         child: Icon(
                           Icons.circle,
-                          color: Colors.purple,
-                          size: 15,
+                          color: markerData.isTaken ? Colors.red : Colors.green,
+                          size: _getMarkerIconSize(),
                         ),
                         onTap: () => _showMarkerDetails(markerData),
                       ),

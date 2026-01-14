@@ -17,7 +17,7 @@ class PlacesContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: 250,
+      width: double.infinity,
       height: 175,
       padding: const EdgeInsets.only(left: 15.0),
       decoration: BoxDecoration(

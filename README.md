@@ -1,16 +1,46 @@
-# spark_prototype
+# Spark - Smart Parking System
 
-A new Flutter project.
+## Overview
+Spark is a mobile application designed to monitor and display real-time parking spot availability across the city. The system aims to reduce time spent searching for parking by providing users with instant access to available spots near their location.
 
-## Getting Started
+## How It Works
+The project consists of three main components:
 
-This project is a starting point for a Flutter application.
+### 1. Hardware Infrastructure
+- Electromagnetic beam sensors installed at each parking spot
+- Sensors detect vehicle presence/absence in real-time
+- Data is transmitted to a central server via IoT network
 
-A few resources to get you started if this is your first Flutter project:
+### 2. Backend Server
+- Receives and processes data from parking sensors
+- Maintains real-time database of parking spot status
+- Provides API endpoints for mobile app consumption
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 3. Mobile Application
+- Built with Flutter for cross-platform support (iOS/Android)
+- Displays interactive map with parking spot locations
+- Color-coded markers indicate availability (green: available, red: taken)
+- Real-time GPS tracking to show user location
+- Navigate to selected parking spots
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+- 🗺️ Interactive map interface with real-time updates
+- 📍 GPS-based user location tracking
+- 🔴🟢 Color-coded parking availability indicators
+- 📱 Cross-platform mobile support
+- 🔄 Live synchronization with sensor network
+
+## Technology Stack
+- **Frontend**: Flutter/Dart
+- **Maps**: Flutter Map with OpenStreetMap
+- **Location Services**: Geolocator
+- **Hardware**: Electromagnetic beam sensors (IoT)
+
+## Project Status
+Currently in development - prototype phase with simulated parking data.
+
+## Future Enhancements
+- Payment integration for parking fees
+- Historical data and predictive analytics
+- Multi-city support
+- User notifications for spot availability

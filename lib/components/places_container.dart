@@ -59,43 +59,46 @@ class PlacesContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Occupée",
-                              style: TextStyle(
-                                fontFamily: "Special Gothic Expanded One",
-                                fontSize: 30,
-                                color: isOccupied
-                                    ? Colors.white
-                                    : Colors.white.withAlpha(25),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            Transform.translate(
-                              offset: const Offset(0, -10),
-                              child: Text(
-                                "Libre",
+                        Flexible(
+                          flex: 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Occupée",
                                 style: TextStyle(
                                   fontFamily: "Special Gothic Expanded One",
                                   fontSize: 30,
                                   color: isOccupied
-                                      ? Colors.white.withAlpha(25)
-                                      : Colors.white,
+                                      ? Colors.white
+                                      : Colors.white.withAlpha(25),
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                            ),
-                          ],
+                              Transform.translate(
+                                offset: const Offset(0, -10),
+                                child: Text(
+                                  "Libre",
+                                  style: TextStyle(
+                                    fontFamily: "Special Gothic Expanded One",
+                                    fontSize: 30,
+                                    color: isOccupied
+                                        ? Colors.white.withAlpha(25)
+                                        : Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         if (showIcon)
                           Expanded(
                             child: Transform.translate(
-                              offset: const Offset(8, -15),
+                              offset: const Offset(0, -15),
                               child: Icon(
                                 Icons.fmd_good_outlined,
                                 size: 100,
@@ -129,7 +132,6 @@ class PlacesContainer extends StatelessWidget {
             );
           },
         ),
-
       ),
     );
   }

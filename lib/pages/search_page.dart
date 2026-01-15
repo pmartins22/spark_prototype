@@ -37,47 +37,61 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 8),
-              child: SearchPageAppBar(),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.horizontal(left: Radius.circular(30.0), right: Radius.circular(30.0)),
+            boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(64),
+            blurRadius: 4.0,
+            offset: const Offset(0, -4),
+          ),
+        ],
+        color: Colors.white
+      ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: SearchPageAppBar(),
+                ),
+            
+                // Titre ou instruction
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    'Places disponibles',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                ),
+            
+                // Liste verticale de PlacesContainer
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    itemCount: _places.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final p = _places[index];
+                      return PlacesContainer(
+                        isOccupied: p.isOccupied,
+                        address: p.address,
+                      );
+                    },
+                  ),
+                ),
+            
+                // Optionnel : afficher une liste verticale supplémentaire ou détails
+                const SizedBox(height: 16),
+                Text('${_places.length} places trouvées'),
+              ],
             ),
-
-            // Titre ou instruction
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Text(
-                'Places disponibles',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-            ),
-
-            // Liste verticale de PlacesContainer
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                itemCount: _places.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final p = _places[index];
-                  return PlacesContainer(
-                    isOccupied: p.isOccupied,
-                    address: p.address,
-                  );
-                },
-              ),
-            ),
-
-            // Optionnel : afficher une liste verticale supplémentaire ou détails
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('${_places.length} places trouvées'),
-            ),
-          ],
+          ),
         ),
       ),
     );

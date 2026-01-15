@@ -1,28 +1,18 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
 
-class SearchPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+class SearchPageAppBar extends StatelessWidget {
   const SearchPageAppBar({super.key});
-
-  static const double _height = kToolbarHeight + 60;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: _height,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(64),
-            blurRadius: 4.0,
-            offset: const Offset(0, -4),
-          ),
-        ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
             onPressed: () {},
@@ -37,18 +27,15 @@ class SearchPageAppBar extends StatelessWidget implements PreferredSizeWidget {
               size: 15,
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width - 150,
-            height: 42,
-            child: Container(
-              decoration: BoxDecoration(
+          Expanded(  
+            decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withAlpha(32),
                     blurRadius: 4.0,
-                    offset: const Offset(0, 4),
+                    offset: const Offset(0, -2),
                     inset: true,
                   ),
                   BoxShadow(
@@ -59,10 +46,11 @@ class SearchPageAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ],
               ),
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Icon(Icons.search, color: Color(0xFF0066CC)),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter a search term',
+            
               ),
             ),
           ),
@@ -70,7 +58,4 @@ class SearchPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(_height);
 }

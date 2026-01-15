@@ -4,7 +4,7 @@ import 'dart:convert';
 
 class AuthService {
   static const String _tokenKey = 'auth_token';
-  static const String _baseUrl = '';
+  static const String _baseUrl = 'http://10.31.36.48:3000';
 
   Future<bool> signUp(String email, String username, String password) async {
     try {

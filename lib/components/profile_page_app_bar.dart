@@ -28,7 +28,7 @@ class ProfilePageAppBar extends StatelessWidget implements PreferredSizeWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all<Color>(Colors.black),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(

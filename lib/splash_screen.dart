@@ -15,10 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // Après 3 secondes, naviguer vers la MapScreen
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MapScreen()),
-      );
+      Navigator.pushReplacementNamed(context, '/home');
     });
   }
 

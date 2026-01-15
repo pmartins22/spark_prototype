@@ -67,10 +67,7 @@ class SparkBottomNavBar extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            ),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/profile'),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>(
                 Color(0xFF0066CC),

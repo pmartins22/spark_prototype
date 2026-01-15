@@ -118,6 +118,13 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: const Text('Don\'t have an account? Sign Up'),
               ),
+              //button to delete later. for testing purposes only
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/home');
+                },
+                child: const Text('No login'),
+              ),
             ],
           ),
         ),

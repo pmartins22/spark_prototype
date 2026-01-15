@@ -212,56 +212,59 @@ class MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : FlutterMap(
-      mapController: _mapController,
-      options: MapOptions(
-        initialCenter: _currentPosition ?? LatLng(43.6, 1.44),
-        initialZoom: 15.0,
-        onPositionChanged: (MapCamera position, bool hasGesture) {
-          setState(() {
-            _currentZoom = position.zoom;
-          });
-        },
-          interactionOptions: InteractionOptions(
-            flags: widget.interactable ? InteractiveFlag.all : InteractiveFlag.none
-          )
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.spark_prototype',
+    return Hero(
+      tag: "map_hero",
+      child: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : FlutterMap(
+        mapController: _mapController,
+        options: MapOptions(
+          initialCenter: _currentPosition ?? LatLng(43.6, 1.44),
+          initialZoom: 15.0,
+          onPositionChanged: (MapCamera position, bool hasGesture) {
+            setState(() {
+              _currentZoom = position.zoom;
+            });
+          },
+            interactionOptions: InteractionOptions(
+              flags: widget.interactable ? InteractiveFlag.all : InteractiveFlag.none
+            )
         ),
-        MarkerLayer(
-          markers: _markers.map((markerData) {
-            return Marker(
-              point: markerData.position,
-              width: 80,
-              height: 80,
-              child: GestureDetector(
-                child: Icon(
-                  Icons.circle,
-                  color: markerData.isTaken ? Colors.red : Colors.green,
-                  size: _getMarkerIconSize(),
-                ),
-                onTap: () => _showMarkerDetails(markerData),
-              ),
-            );
-          }).toList(),
-        ),
-        if (_currentPosition != null)
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'com.example.spark_prototype',
+          ),
           MarkerLayer(
-            markers: [
-              Marker(
-                point: _currentPosition!,
+            markers: _markers.map((markerData) {
+              return Marker(
+                point: markerData.position,
                 width: 80,
                 height: 80,
-                child: Icon(Icons.circle, color: Colors.blue, size: 20),
-              ),
-            ],
+                child: GestureDetector(
+                  child: Icon(
+                    Icons.circle,
+                    color: markerData.isTaken ? Colors.red : Colors.green,
+                    size: _getMarkerIconSize(),
+                  ),
+                  onTap: () => _showMarkerDetails(markerData),
+                ),
+              );
+            }).toList(),
           ),
-      ],
+          if (_currentPosition != null)
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: _currentPosition!,
+                  width: 80,
+                  height: 80,
+                  child: Icon(Icons.circle, color: Colors.blue, size: 20),
+                ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 }

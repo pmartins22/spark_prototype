@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
 
+import '../pages/profile_page.dart';
+
 class SparkBottomNavBar extends StatelessWidget {
   const SparkBottomNavBar({super.key});
 
@@ -65,7 +67,7 @@ class SparkBottomNavBar extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pushReplacementNamed(context, '/profile'),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>(
                 Color(0xFF0066CC),

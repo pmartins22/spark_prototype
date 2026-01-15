@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:spark_prototype/components/places_container.dart';
 import 'package:spark_prototype/components/spark_bottom_nav_bar.dart';
 
+import '../map_widget.dart';
+
 class Menu extends StatefulWidget {
   const Menu({super.key});
 
@@ -30,15 +32,31 @@ class _MenuState extends State<Menu> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: 350,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(28),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(28),
+                child: SizedBox(
+                  height: 350,
+                  width: MediaQuery.of(context).size.width,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      MapWidget(
+                        interactable: false,
+                      ),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            print("Navigating to map page");
+                            Navigator.pushNamed(context, '/map');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                child: GestureDetector(onTap: () {}),
-              ),
+              )
+              ,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

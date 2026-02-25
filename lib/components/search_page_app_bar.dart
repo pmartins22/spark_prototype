@@ -58,7 +58,7 @@ class SearchPageAppBar extends StatelessWidget {
                   child: Icon(Icons.search, color: Color(0xFF0066CC)),
                 ),
               ),
-              onTap: () => Navigator.pushReplacementNamed(context, '/search'),
+              onTap: () => Navigator.pushReplacementNamed(context, '/search'),// A modifier pour passer à la page de recherche réelle
             ),
           ),
         ],

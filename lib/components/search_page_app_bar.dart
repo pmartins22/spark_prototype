@@ -17,7 +17,7 @@ class SearchPageAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {Navigator.pushNamed(context, '/home');},
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>(
                 Color(0xFF0066CC),

@@ -40,29 +40,32 @@ class SparkBottomNavBar extends StatelessWidget {
           SizedBox(
             width: MediaQuery.of(context).size.width - 150,
             height: 42,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(32),
-                    blurRadius: 4.0,
-                    offset: const Offset(0, -2),
-                    inset: true,
-                  ),
-                  BoxShadow(
-                    color: Colors.black.withAlpha(32),
-                    blurRadius: 4.0,
-                    offset: const Offset(0, 2),
-                    inset: true,
-                  ),
-                ],
-              ),
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Icon(Icons.search, color: Color(0xFF0066CC)),
+            child: GestureDetector(
+              onTap: () => Navigator.pushReplacementNamed(context, '/search'),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(32),
+                      blurRadius: 4.0,
+                      offset: const Offset(0, -2),
+                      inset: true,
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withAlpha(32),
+                      blurRadius: 4.0,
+                      offset: const Offset(0, 2),
+                      inset: true,
+                    ),
+                  ],
+                ),
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Icon(Icons.search, color: Color(0xFF0066CC)),
+                ),
               ),
             ),
           ),

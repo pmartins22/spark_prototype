@@ -1,15 +1,16 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:spark_prototype/components/places_container.dart';
 import 'package:spark_prototype/components/profile_page_app_bar.dart';
 
+import '../models/user.dart';
+import '../session/auth_service.dart';
+
 class ProfilePage extends StatefulWidget {
-  final String nickname = "User123";
-  final List<PlacesContainer> favoritePlaces = List<PlacesContainer>.empty(
-    growable: true,
-  );
 
   ProfilePage({super.key});
 
@@ -18,15 +19,34 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String get _nickname => widget.nickname;
+  User? _user;
+  List<PlacesContainer>? _favoritePlaces;
 
-  List<Widget> _buildTestListForCarousel() {
-    return List.generate(5, (index) {
-      return PlacesContainer(
-        isOccupied: false,
-        address: "Rue Test, 01000 Ville",
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  void _fetchUserData() async {
+    final authService = AuthService();
+    final token = await authService.getToken();
+    if (token == null) return;
+
+    try {
+      final response = await http.get(
+        Uri.parse('${AuthService.baseUrl}/user'),
+        headers: {'Authorization': 'Bearer $token'},
       );
-    });
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _user = User.fromJson(data);
+        });
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
   }
 
   @override
@@ -41,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                _nickname,
+                _user != null ? _user!.username : "Loading...",
                 style: TextStyle(
                   fontFamily: "Poppins",
                   fontSize: 36,
@@ -100,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: CarouselView(
                   itemExtent: 250,
                   itemSnapping: true,
-                  children: _buildTestListForCarousel(),
+                  children: _favoritePlaces ?? [Center(child: Text("Loading..."))],
                 ),
               ),
             ],

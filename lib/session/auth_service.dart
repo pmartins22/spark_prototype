@@ -4,12 +4,12 @@ import 'dart:convert';
 
 class AuthService {
   static const String _tokenKey = 'auth_token';
-  static const String _baseUrl = 'http://10.31.36.48:3000';
+  static const String baseUrl = 'http://10.31.36.48:3000';
 
   Future<bool> signUp(String email, String username, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$_baseUrl/signup'),
+        Uri.parse('$baseUrl/signup'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
@@ -26,7 +26,7 @@ class AuthService {
   Future<bool> signIn(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$_baseUrl/signin'),
+        Uri.parse('$baseUrl/signin'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
@@ -61,7 +61,7 @@ class AuthService {
 
     try {
       final response = await http.get(
-        Uri.parse('$_baseUrl/validate-token'),
+        Uri.parse('$baseUrl/validate-token'),
         headers: {'Authorization': 'Bearer $token'},
       );
       return response.statusCode == 200;

@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -138,7 +139,7 @@ class MapWidgetState extends State<MapWidget> {
       return 8;
     } else if (_currentZoom >= 16.0 && _currentZoom < 17.5) {
       return 10;
-    } else if (_currentZoom >= 17.5 && _currentZoom < 19.5){
+    } else if (_currentZoom >= 17.5 && _currentZoom < 19.5) {
       return 12;
     } else {
       return 15;
@@ -209,62 +210,82 @@ class MapWidgetState extends State<MapWidget> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Hero(
       tag: "map_hero",
       child: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          initialCenter: _currentPosition ?? LatLng(43.6, 1.44),
-          initialZoom: 15.0,
-          onPositionChanged: (MapCamera position, bool hasGesture) {
-            setState(() {
-              _currentZoom = position.zoom;
-            });
-          },
-            interactionOptions: InteractionOptions(
-              flags: widget.interactable ? InteractiveFlag.all : InteractiveFlag.none
-            )
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.spark_prototype',
-          ),
-          MarkerLayer(
-            markers: _markers.map((markerData) {
-              return Marker(
-                point: markerData.position,
-                width: 80,
-                height: 80,
-                child: GestureDetector(
-                  child: Icon(
-                    Icons.circle,
-                    color: markerData.isTaken ? Colors.red : Colors.green,
-                    size: _getMarkerIconSize(),
+          ? Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(32),
+                    blurRadius: 4.0,
+                    offset: const Offset(0, -2),
+                    inset: true,
                   ),
-                  onTap: () => _showMarkerDetails(markerData),
+                  BoxShadow(
+                    color: Colors.black.withAlpha(32),
+                    blurRadius: 4.0,
+                    offset: const Offset(0, 2),
+                    inset: true,
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          : FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: _currentPosition ?? LatLng(43.6, 1.44),
+                initialZoom: 15.0,
+                onPositionChanged: (MapCamera position, bool hasGesture) {
+                  setState(() {
+                    _currentZoom = position.zoom;
+                  });
+                },
+                interactionOptions: InteractionOptions(
+                  flags: widget.interactable
+                      ? InteractiveFlag.all
+                      : InteractiveFlag.none,
                 ),
-              );
-            }).toList(),
-          ),
-          if (_currentPosition != null)
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: _currentPosition!,
-                  width: 80,
-                  height: 80,
-                  child: Icon(Icons.circle, color: Colors.blue, size: 20),
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.spark_prototype',
                 ),
+                MarkerLayer(
+                  markers: _markers.map((markerData) {
+                    return Marker(
+                      point: markerData.position,
+                      width: 80,
+                      height: 80,
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.circle,
+                          color: markerData.isTaken ? Colors.red : Colors.green,
+                          size: _getMarkerIconSize(),
+                        ),
+                        onTap: () => _showMarkerDetails(markerData),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (_currentPosition != null)
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: _currentPosition!,
+                        width: 80,
+                        height: 80,
+                        child: Icon(Icons.circle, color: Colors.blue, size: 20),
+                      ),
+                    ],
+                  ),
               ],
             ),
-        ],
-      ),
     );
   }
 }

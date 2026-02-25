@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
+import 'package:spark_prototype/components/search_page_app_bar.dart';
+import 'package:spark_prototype/pages/search.dart';
 
 import '../pages/profile_page.dart';
 
@@ -41,7 +43,25 @@ class SparkBottomNavBar extends StatelessWidget {
             width: MediaQuery.of(context).size.width - 150,
             height: 42,
             child: GestureDetector(
-              onTap: () => Navigator.pushReplacementNamed(context, '/search'),
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => const Search(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0,1),
+                          end: Offset.zero,
+                        ).animate(
+                          CurvedAnimation(parent: animation, curve: Curves.easeInOut)
+                        ),
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 300),
+                  ),
+                );
+              },
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,

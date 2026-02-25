@@ -17,7 +17,9 @@ class SearchPageAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-            onPressed: () {Navigator.pushNamed(context, '/home');},
+            onPressed: () {
+              Navigator.pop(context); 
+            },
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>(
                 Color(0xFF0066CC),
@@ -30,35 +32,32 @@ class SearchPageAppBar extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: GestureDetector(
-              child: Container(
-                margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-                height: 42,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(32),
-                      blurRadius: 4.0,
-                      offset: const Offset(0, -2),
-                      inset: true,
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withAlpha(32),
-                      blurRadius: 4.0,
-                      offset: const Offset(0, 2),
-                      inset: true,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Icon(Icons.search, color: Color(0xFF0066CC)),
-                ),
+            child: Container(
+              margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+              height: 42,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(32),
+                    blurRadius: 4.0,
+                    offset: const Offset(0, -2),
+                    inset: true,
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withAlpha(32),
+                    blurRadius: 4.0,
+                    offset: const Offset(0, 2),
+                    inset: true,
+                  ),
+                ],
               ),
-              onTap: () => Navigator.pushReplacementNamed(context, '/search'),// A modifier pour passer à la page de recherche réelle
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Icon(Icons.search, color: Color(0xFF0066CC)),
+              ),
             ),
           ),
         ],

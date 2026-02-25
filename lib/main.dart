@@ -6,7 +6,7 @@ import 'package:spark_prototype/pages/profile_page.dart';
 import 'package:spark_prototype/signup.dart';
 import 'package:spark_prototype/splash_screen.dart';
 
-import 'map.dart';
+import 'map_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp
     ]);

@@ -9,8 +9,9 @@ import 'models/marker_data.dart';
 
 class MapWidget extends StatefulWidget {
   final bool interactable;
+  final LatLng? initialCenter;
 
-  const MapWidget({super.key, this.interactable = true});
+  const MapWidget({super.key, this.interactable = true, this.initialCenter});
 
   @override
   State<MapWidget> createState() => MapWidgetState();
@@ -217,7 +218,7 @@ class MapWidgetState extends State<MapWidget> {
         : FlutterMap(
       mapController: _mapController,
       options: MapOptions(
-        initialCenter: _currentPosition ?? LatLng(43.6, 1.44),
+          initialCenter: widget.initialCenter ?? _currentPosition ?? LatLng(43.6047, 1.4442),
         initialZoom: 15.0,
         onPositionChanged: (MapCamera position, bool hasGesture) {
           setState(() {

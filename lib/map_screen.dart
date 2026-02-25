@@ -16,19 +16,29 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: ClipRect(
-          clipBehavior: Clip.antiAlias,
-          child: FilledButton.icon(
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(
-                Color(0xFF45A2FF),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Center(
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: FilledButton(
+                style: ButtonStyle(
+                  shape: WidgetStateProperty.all<CircleBorder>(
+                    CircleBorder(),
+                  ),
+                  padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                    Color(0xFF45A2FF),
+                  ),
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: ImageIcon(
+                  AssetImage("assets/icons/left_arrow.png"),
+                  color: Color(0xFF00316C),
+                  size: 20,
+                ),
               ),
-            ),
-            onPressed: () => Navigator.of(context).pop,
-            label: Text("Going Back"),
-            icon: ImageIcon(
-              AssetImage("assets/icons/right_arrow.png"),
-              color: Colors.white,
             ),
           ),
         ),

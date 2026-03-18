@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'map.dart';
 
 class SplashScreen extends StatefulWidget {
 

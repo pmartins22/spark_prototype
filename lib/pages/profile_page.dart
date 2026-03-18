@@ -28,25 +28,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _fetchUserData() async {
-    final authService = AuthService();
-    final token = await authService.getToken();
-    if (token == null) return;
-
-    try {
-      final response = await http.get(
-        Uri.parse('${AuthService.baseUrl}/user'),
-        headers: {'Authorization': 'Bearer $token'},
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _user = User.fromJson(data);
-        });
-      }
-    } catch (e) {
-      print('Error fetching user data: $e');
-    }
+    final user = await AuthService().getUserData();
+    setState(() {
+      _user = user;
+    });
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:spark_prototype/login.dart';
 import 'package:spark_prototype/pages/menu.dart';
 import 'package:spark_prototype/pages/profile_page.dart';
+import 'package:spark_prototype/pages/search.dart';
 import 'package:spark_prototype/signup.dart';
 import 'package:spark_prototype/splash_screen.dart';
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Menu(),
         '/profile': (context) => ProfilePage(),
         '/map': (context) => MapScreen(),
+        '/search': (context) => Search(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
       },

@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
-import 'package:spark_prototype/components/places_container.dart';
+import 'package:spark_prototype/components/parking_container.dart';
 import 'package:spark_prototype/components/search_page_app_bar.dart';
+import 'package:spark_prototype/models/parking.dart';
+import 'package:spark_prototype/session/auth_service.dart';
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
-
-class Place {
-  final bool isOccupied;
-  final double lat;
-  final double lng;
-  final String address;
-
-  Place({
-    required this.isOccupied,
-    required this.lat,
-    required this.lng,
-    required this.address,
-  });
-}
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -25,24 +15,58 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final List<Place> _places = [
-    Place(isOccupied: false, lat: 48.8566, lng: 2.3522, address: 'Paris, France'),
-    Place(isOccupied: true, lat: 48.8584, lng: 2.2945, address: 'Tour Eiffel, Paris'),
-    Place(isOccupied: false, lat: 48.8606, lng: 2.3376, address: 'Louvre, Paris'),
-    Place(isOccupied: false, lat: 48.8529, lng: 2.3499, address: 'Île de la Cité, Paris'),
-    Place(isOccupied: true, lat: 48.8529, lng: 2.3499, address: 'Île de la Cité, Paris'),
-    Place(isOccupied: false, lat: 48.8529, lng: 2.3499, address: 'Île de la Cité, Paris'),
-  ];
+  List<Parking> _allParkings = [];
+  List<Parking> _filteredParkings = [];
+  bool _loading = true;
+  final TextEditingController _searchController = TextEditingController();
 
-  bool filterLibreOnly = false;
+  @override
+  void initState() {
+    super.initState();
+    _fetchParkings();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredParkings = _allParkings
+          .where((p) => p.name.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
+  Future<void> _fetchParkings() async {
+    final token = await AuthService().getToken();
+    if (token == null) return;
+
+    try {
+      final response = await http.get(
+        Uri.parse('${AuthService.baseUrl}/parkings'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          _allParkings = data.map((p) => Parking.fromJson(p)).toList();
+          _filteredParkings = _allParkings;
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      setState(() => _loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    //  Filtre à chaque build pour obtenir la liste des places à afficher
-    final List<Place> displayedPlaces = filterLibreOnly
-        ? _places.where((place) => !place.isOccupied).toList()
-        : _places;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -70,50 +94,36 @@ class _SearchState extends State<Search> {
                   padding: EdgeInsets.only(top: 16),
                   child: SearchPageAppBar(),
                 ),
-                // Bouton "Libre uniquement"
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: FilledButton(
-                    onPressed: () {
-                      setState(() {
-                        filterLibreOnly = !filterLibreOnly;
-                      });
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll<Color>(
-                        filterLibreOnly ? const Color(0xFF0066CC) : Colors.grey,
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Rechercher un parking...',
+                      hintStyle: const TextStyle(fontFamily: 'Poppins'),
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide: BorderSide.none,
                       ),
-                      padding: const WidgetStatePropertyAll<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-                      ),
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      'Libre uniquement',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        color: filterLibreOnly ? Colors.white : Colors.black,
-                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
                     ),
                   ),
                 ),
-                // Liste verticale de PlacesContainer
                 Expanded(
-                  child: ListView.separated(
+                  child: _loading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _filteredParkings.isEmpty
+                      ? const Center(child: Text("Aucun parking trouvé"))
+                      : ListView.separated(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    itemCount: displayedPlaces.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemCount: _filteredParkings.length,
+                    separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
                     itemBuilder: (context, index) {
-                      final p = displayedPlaces[index];
-                      return PlacesContainer(
-                        isOccupied: p.isOccupied,
-                        address: p.address,
+                      return ParkingContainer(
+                        parking: _filteredParkings[index],
                       );
                     },
                   ),

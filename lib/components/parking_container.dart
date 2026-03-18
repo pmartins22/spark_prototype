@@ -1,27 +1,26 @@
-// dart
-// Fichier : `lib/components/places_container.dart`
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
+import 'package:spark_prototype/models/parking.dart';
 
-class PlacesContainer extends StatelessWidget {
-  final bool isOccupied;
-  final String address;
+class ParkingContainer extends StatelessWidget {
+  final Parking parking;
 
-  const PlacesContainer({
+  const ParkingContainer({
     super.key,
-    required this.isOccupied,
-    required this.address,
+    required this.parking,
   });
 
   @override
   Widget build(BuildContext context) {
+    final int freeSpots = parking.freeSpotsAmount;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       width: 250,
       height: 175,
       padding: const EdgeInsets.only(left: 15.0),
       decoration: BoxDecoration(
-        color: isOccupied ? const Color(0xFF333333) : const Color(0xFF0066CC),
+        color: const Color(0xFF0066CC),
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
@@ -66,27 +65,23 @@ class PlacesContainer extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Occupée",
-                                style: TextStyle(
+                                "$freeSpots",
+                                style: const TextStyle(
                                   fontFamily: "Special Gothic Expanded One",
                                   fontSize: 30,
-                                  color: isOccupied
-                                      ? Colors.white
-                                      : Colors.white.withAlpha(25),
+                                  color: Colors.white,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                               Transform.translate(
                                 offset: const Offset(0, -10),
-                                child: Text(
-                                  "Libre",
+                                child: const Text(
+                                  "Libres",
                                   style: TextStyle(
                                     fontFamily: "Special Gothic Expanded One",
                                     fontSize: 30,
-                                    color: isOccupied
-                                        ? Colors.white.withAlpha(25)
-                                        : Colors.white,
+                                    color: Colors.white,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -116,7 +111,7 @@ class PlacesContainer extends StatelessWidget {
                     right: 10,
                     bottom: bottomOffset,
                     child: Text(
-                      address,
+                      parking.address ?? '',
                       style: const TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 24,

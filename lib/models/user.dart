@@ -1,5 +1,5 @@
+import 'package:spark_prototype/models/parking.dart';
 import 'package:spark_prototype/models/user_addresses.dart';
-import 'package:spark_prototype/models/user_favorites.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -10,7 +10,7 @@ class User {
   final String? createdAt;
   final Uint8List? picture;
   final List<Address> addresses;
-  final List<Favorite> favorites;
+  final List<Parking> favorites;
 
   User({
     required this.id,
@@ -34,7 +34,7 @@ class User {
           .toList() ??
           [],
       favorites: (json['favorites'] as List<dynamic>?)
-          ?.map((f) => Favorite.fromJson(f))
+          ?.map((p) => Parking.fromJson(p))
           .toList() ??
           [],
     );
@@ -47,6 +47,6 @@ class User {
     'created_at': createdAt,
     'picture': picture != null ? base64Encode(picture!) : null,
     'addresses': addresses.map((a) => a.toJson()).toList(),
-    'favorites': favorites.map((f) => f.toJson()).toList(),
+    'favorites': favorites.map((p) => p.toJson()).toList(),
   };
 }

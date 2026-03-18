@@ -13,6 +13,8 @@ class Parking {
     this.spots = const [],
   });
 
+  int get freeSpotsAmount => spots.where((s) => s.state == 'free').length;
+
   factory Parking.fromJson(Map<String, dynamic> json) {
     return Parking(
       id: json['id'],

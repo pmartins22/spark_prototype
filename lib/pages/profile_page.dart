@@ -1,15 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:spark_prototype/components/places_container.dart';
+import 'package:spark_prototype/components/parking_container.dart';
 import 'package:spark_prototype/components/profile_page_app_bar.dart';
-
 import '../models/user.dart';
 import '../session/auth_service.dart';
 
 class ProfilePage extends StatefulWidget {
-
   ProfilePage({super.key});
 
   @override
@@ -18,8 +13,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   User? _user;
-  List<PlacesContainer>? _favoritePlaces;
 
+  @override
   void initState() {
     super.initState();
     _fetchUserData();
@@ -27,9 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _fetchUserData() async {
     final user = await AuthService().getUserData();
-    setState(() {
-      _user = user;
-    });
+    setState(() => _user = user);
   }
 
   @override
@@ -45,21 +38,21 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 _user != null ? _user!.username : "Loading...",
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: "Poppins",
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Image(image: AssetImage("assets/profile_frame.png")),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              const Image(image: AssetImage("assets/profile_frame.png")),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.0),
                 child: Divider(color: Colors.grey),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Domicile",
                     style: TextStyle(
                       fontFamily: "Poppins",
@@ -83,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Récents",
                     style: TextStyle(
                       fontFamily: "Poppins",
@@ -100,10 +93,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   maxHeight: 180,
                   maxWidth: MediaQuery.of(context).size.width,
                 ),
-                child: CarouselView(
+                child: _user == null
+                    ? const Center(child: CircularProgressIndicator())
+                    : _user!.favorites.isEmpty
+                    ? const Center(child: Text("Aucun favori"))
+                    : CarouselView(
                   itemExtent: 250,
                   itemSnapping: true,
-                  children: _favoritePlaces ?? [Center(child: Text("Loading..."))],
+                  children: _user!.favorites
+                      .map((p) => ParkingContainer(parking: p))
+                      .toList(),
                 ),
               ),
             ],

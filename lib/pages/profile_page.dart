@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:spark_prototype/components/places_container.dart';
 import 'package:spark_prototype/components/profile_page_app_bar.dart';
 

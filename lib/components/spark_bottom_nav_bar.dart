@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
-import 'package:spark_prototype/components/search_page_app_bar.dart';
 import 'package:spark_prototype/pages/search.dart';
 
-import '../pages/profile_page.dart';
 
 class SparkBottomNavBar extends StatelessWidget {
   const SparkBottomNavBar({super.key});

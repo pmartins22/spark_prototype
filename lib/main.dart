@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:spark_prototype/components/search_page_app_bar.dart';
 import 'package:spark_prototype/pages/menu.dart';
 import 'package:spark_prototype/pages/profile_page.dart';
 import 'package:spark_prototype/pages/search.dart';

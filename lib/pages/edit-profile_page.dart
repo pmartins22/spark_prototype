@@ -27,6 +27,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   User? _user;
   File? _pickedImage;
+  bool _removePicture = false;
   bool _isSaving = false;
   bool _isAddingAddress = false;
 
@@ -47,7 +48,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
-    if (picked != null) setState(() => _pickedImage = File(picked.path));
+    if (picked != null) {
+      setState(() {
+        _pickedImage = File(picked.path);
+        _removePicture = false;
+      });
+    }
+  }
+
+  void _clearImage() {
+    setState(() {
+      _pickedImage = null;
+      _removePicture = true;
+    });
   }
 
   Future<void> _saveProfile() async {
@@ -67,11 +80,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _pickedImage!.path,
         contentType: MediaType('image', 'jpeg'),
       ));
+    } else if (_removePicture) {
+      request.fields['remove_picture'] = 'true';
     }
 
     final response = await request.send();
     if (response.statusCode == 200) {
       await AuthService().updateUserData();
+      await _loadUser();
+      setState(() {
+        _pickedImage = null;
+        _removePicture = false;
+      });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profile updated!')),
@@ -135,6 +155,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  Future<void> _deleteAddress(int addressId) async {
+    final token = await AuthService().getToken();
+    final response = await http.delete(
+      Uri.parse('${AuthService.baseUrl}/user/addresses/$addressId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      await AuthService().updateUserData();
+      await _loadUser();
+    }
+  }
+
   Widget _buildTextField(TextEditingController controller, String label, {bool required = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -149,9 +182,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  ImageProvider _resolveAvatar(Uint8List? currentPicture) {
+    if (_pickedImage != null) return FileImage(_pickedImage!);
+    if (!_removePicture && currentPicture != null) return MemoryImage(currentPicture);
+    return const AssetImage("assets/profile_frame.png");
+  }
+
   @override
   Widget build(BuildContext context) {
     final Uint8List? currentPicture = _user?.picture;
+    final bool hasPicture = _pickedImage != null || (!_removePicture && currentPicture != null);
 
     return Scaffold(
       appBar: AppBar(
@@ -179,27 +219,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       CircleAvatar(
                         radius: 48,
                         backgroundColor: Colors.grey[200],
-                        backgroundImage: _pickedImage != null
-                            ? FileImage(_pickedImage!)
-                            : currentPicture != null
-                            ? MemoryImage(currentPicture)
-                            : null,
-                        child: (_pickedImage == null && currentPicture == null)
-                            ? const Icon(Icons.person, size: 48, color: Colors.grey)
-                            : null,
+                        backgroundImage: _resolveAvatar(currentPicture),
                       ),
                       Positioned(
                         bottom: 0,
                         right: 0,
                         child: Container(
                           padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle,
-                          ),
+                          decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
                           child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
                         ),
                       ),
+                      if (hasPicture)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _clearImage,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                              child: const Icon(Icons.close, size: 14, color: Colors.white),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -327,6 +370,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             onPressed: () => _setMainAddress(address.id),
                             child: const Text('Set main', style: TextStyle(color: Colors.black)),
                           ),
+                        IconButton(
+                          onPressed: () => _deleteAddress(address.id),
+                          icon: Icon(Icons.delete_outline, color: isMain ? Colors.white54 : Colors.red),
+                        ),
                       ],
                     ),
                   );

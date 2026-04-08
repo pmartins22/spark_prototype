@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:spark_prototype/map_widget.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  final LatLng? initialCenter;
+
+  const MapScreen({super.key, this.initialCenter});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -48,7 +51,7 @@ class _MapScreenState extends State<MapScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
-          child: MapWidget(key: _mapKey),
+          child: MapWidget(key: _mapKey, initialCenter: widget.initialCenter),
         ),
       ),
       floatingActionButton: FloatingActionButton(

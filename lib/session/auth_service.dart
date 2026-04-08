@@ -7,7 +7,7 @@ import '../models/user.dart';
 class AuthService {
   static const String _userKey = 'user_data';
   static const String _tokenKey = 'auth_token';
-  static const String baseUrl = 'http://10.31.34.89:3000';
+  static const String baseUrl = 'http://10.31.35.8:3000';
 
   Future<bool> signUp(String email, String username, String password) async {
     try {

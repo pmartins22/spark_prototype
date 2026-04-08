@@ -50,7 +50,7 @@ class _SearchState extends State<Search> {
       final response = await http.get(
         Uri.parse('${AuthService.baseUrl}/parkings'),
         headers: {'Authorization': 'Bearer $token'},
-      );
+      ).timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
@@ -59,6 +59,8 @@ class _SearchState extends State<Search> {
           _filteredParkings = _allParkings;
           _loading = false;
         });
+      } else {
+        setState(() => _loading = false);
       }
     } catch (e) {
       setState(() => _loading = false);

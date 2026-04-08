@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
+import 'package:spark_prototype/pages/edit-profile_page.dart';
 import '../session/auth_service.dart';
 
 class ProfilePageAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -49,6 +50,20 @@ class ProfilePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              leading: const Icon(Icons.edit, color: Colors.blue),
+              title: const Text(
+                'Edit Profile',
+                style: TextStyle(color: Colors.blue),
+              ),
+              onTap: () {
+                Navigator.pop(bottomSheetContext);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditProfilePage()),
+                );
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text(

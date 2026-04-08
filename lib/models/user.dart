@@ -9,8 +9,14 @@ class User {
   final String username;
   final String? createdAt;
   final Uint8List? picture;
+  final int? mainAddressId;
   final List<Address> addresses;
   final List<Parking> favorites;
+
+  Address? get mainAddress => addresses.cast<Address?>().firstWhere(
+        (a) => a?.id == mainAddressId,
+    orElse: () => null,
+  );
 
   User({
     required this.id,
@@ -18,6 +24,7 @@ class User {
     required this.username,
     this.createdAt,
     this.picture,
+    this.mainAddressId,
     this.addresses = const [],
     this.favorites = const [],
   });
@@ -29,6 +36,7 @@ class User {
       username: json['username'],
       createdAt: json['created_at'],
       picture: json['picture'] != null ? base64Decode(json['picture']) : null,
+      mainAddressId: json['main_address_id'],
       addresses: (json['addresses'] as List<dynamic>?)
           ?.map((a) => Address.fromJson(a))
           .toList() ??
@@ -46,6 +54,7 @@ class User {
     'username': username,
     'created_at': createdAt,
     'picture': picture != null ? base64Encode(picture!) : null,
+    'main_address_id': mainAddressId,
     'addresses': addresses.map((a) => a.toJson()).toList(),
     'favorites': favorites.map((p) => p.toJson()).toList(),
   };

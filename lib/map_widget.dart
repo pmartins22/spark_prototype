@@ -150,7 +150,7 @@ class MapWidgetState extends ConsumerState<MapWidget> {
       child: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
-          initialCenter: initialCenter,
+          initialCenter: widget.initialCenter ?? initialCenter,
           initialZoom: zoom,
           onPositionChanged: (MapCamera position, bool hasGesture) {
             ref

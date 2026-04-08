@@ -51,5 +51,11 @@
 
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Needed to access location when the app is open and run in background.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to set a profile picture.</string>
+
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to take a profile picture.</string>
 </dict>
 </plist>

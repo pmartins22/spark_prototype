@@ -5,9 +5,9 @@ class MarkerData {
   final LatLng position;
   final bool isTaken;
 
-  MarkerData({
+  const MarkerData({
     required this.address,
     required this.position,
-    required this.isTaken
+    required this.isTaken,
   });
 }

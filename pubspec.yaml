@@ -38,6 +38,9 @@ dependencies:
   latlong2: ^0.9.1
   geolocator: ^14.0.2
   flutter_inset_shadow: ^2.0.3
+  shared_preferences: ^2.5.4
+  http: ^1.6.0
+  flutter_riverpod: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +70,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/icons/
+    - assets/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -135,3 +139,8 @@ flutter:
           style: italic
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/Logo-Spark.png"
+  min_sdk_android: 21

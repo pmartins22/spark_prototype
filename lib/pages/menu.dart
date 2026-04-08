@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:spark_prototype/components/places_container.dart';
+import 'package:spark_prototype/components/parking_container.dart';
 import 'package:spark_prototype/components/spark_bottom_nav_bar.dart';
+import 'package:spark_prototype/models/parking.dart';
+import 'package:spark_prototype/session/auth_service.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import '../map_widget.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -10,12 +16,20 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  List<Widget> _buildTestListForCarousel() {
-    return List.generate(5, (index) {
-      return PlacesContainer(
-        isOccupied: false,
-        address: "Rue Test, 01000 Ville",
-      );
+  List<Parking> _favoriteParkings = [];
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchParkings();
+  }
+
+  Future<void> _fetchParkings() async {
+    final user = await AuthService().getUserData();
+    setState(() {
+      _favoriteParkings = user?.favorites ?? [];
+      _loading = false;
     });
   }
 
@@ -23,21 +37,31 @@ class _MenuState extends State<Menu> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(toolbarHeight: 35, backgroundColor: Colors.white,),
+      appBar: AppBar(toolbarHeight: 35, backgroundColor: Colors.white),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: 350,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(28),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(28),
+                child: SizedBox(
+                  height: 350,
+                  width: MediaQuery.of(context).size.width,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      MapWidget(interactable: false),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => Navigator.pushNamed(context, '/map'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                child: GestureDetector(onTap: () {}),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,9 +79,7 @@ class _MenuState extends State<Menu> {
                   IconButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                        Colors.black,
-                      ),
+                      backgroundColor: WidgetStateProperty.all<Color>(Colors.black),
                     ),
                     icon: ImageIcon(
                       AssetImage("assets/icons/right_arrow.png"),
@@ -71,10 +93,16 @@ class _MenuState extends State<Menu> {
                   maxHeight: 200,
                   maxWidth: MediaQuery.of(context).size.width,
                 ),
-                child: CarouselView(
+                child: _loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _favoriteParkings.isEmpty
+                    ? const Center(child: Text("Aucun favori"))
+                    : CarouselView(
                   itemExtent: 250,
                   itemSnapping: true,
-                  children: _buildTestListForCarousel(),
+                  children: _favoriteParkings
+                      .map((p) => ParkingContainer(parking: p))
+                      .toList(),
                 ),
               ),
             ],

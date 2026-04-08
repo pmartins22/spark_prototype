@@ -1,27 +1,26 @@
-// dart
-// Fichier : `lib/components/places_container.dart`
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
+import 'package:spark_prototype/models/parking.dart';
 
-class PlacesContainer extends StatelessWidget {
-  final bool isOccupied;
-  final String address;
+class ParkingContainer extends StatelessWidget {
+  final Parking parking;
 
-  const PlacesContainer({
+  const ParkingContainer({
     super.key,
-    required this.isOccupied,
-    required this.address,
+    required this.parking,
   });
 
   @override
   Widget build(BuildContext context) {
+    final int freeSpots = parking.freeSpotsAmount;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       width: double.infinity,
       height: 175,
       padding: const EdgeInsets.only(left: 15.0),
       decoration: BoxDecoration(
-        color: isOccupied ? const Color(0xFF333333) : const Color(0xFF0066CC),
+        color: const Color(0xFF0066CC),
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
@@ -59,43 +58,42 @@ class PlacesContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Occupée",
-                              style: TextStyle(
-                                fontFamily: "Special Gothic Expanded One",
-                                fontSize: 30,
-                                color: isOccupied
-                                    ? Colors.white
-                                    : Colors.white.withAlpha(25),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            Transform.translate(
-                              offset: const Offset(0, -10),
-                              child: Text(
-                                "Libre",
-                                style: TextStyle(
+                        Flexible(
+                          flex: 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "$freeSpots",
+                                style: const TextStyle(
                                   fontFamily: "Special Gothic Expanded One",
                                   fontSize: 30,
-                                  color: isOccupied
-                                      ? Colors.white.withAlpha(25)
-                                      : Colors.white,
+                                  color: Colors.white,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                            ),
-                          ],
+                              Transform.translate(
+                                offset: const Offset(0, -10),
+                                child: const Text(
+                                  "Libres",
+                                  style: TextStyle(
+                                    fontFamily: "Special Gothic Expanded One",
+                                    fontSize: 30,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         if (showIcon)
                           Expanded(
                             child: Transform.translate(
-                              offset: const Offset(8, -15),
+                              offset: const Offset(0, -15),
                               child: Icon(
                                 Icons.fmd_good_outlined,
                                 size: 100,
@@ -113,7 +111,7 @@ class PlacesContainer extends StatelessWidget {
                     right: 10,
                     bottom: bottomOffset,
                     child: Text(
-                      address,
+                      parking.address ?? '',
                       style: const TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 24,
@@ -129,7 +127,6 @@ class PlacesContainer extends StatelessWidget {
             );
           },
         ),
-
       ),
     );
   }

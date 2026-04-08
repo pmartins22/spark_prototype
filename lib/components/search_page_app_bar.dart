@@ -7,28 +7,35 @@ class SearchPageAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 65,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>(
-                Color(0xFF0066CC),
+                const Color(0xFF0066CC),
               ),
             ),
-            icon: ImageIcon(
-              AssetImage("assets/icons/right_arrow.png"),
+            icon: const ImageIcon(
+              AssetImage("assets/icons/left_arrow.png"),
               color: Colors.white,
               size: 15,
             ),
           ),
-          Expanded(  
-            decoration: BoxDecoration(
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+              height: 42,
+              decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
@@ -46,11 +53,10 @@ class SearchPageAppBar extends StatelessWidget {
                   ),
                 ],
               ),
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter a search term',
-            
+              alignment: Alignment.centerLeft,
+              child: const Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: Icon(Icons.search, color: Color(0xFF0066CC)),
               ),
             ),
           ),
